@@ -1,6 +1,6 @@
-#Harley Goodner
-#September 22, 2023
-#This code was created to determine the postage cost for entered mail. By determining the postage class (found by the length, width, and thickness of the piece) and the number of postage zones the piece must travel to, the algorithm can return the cost to mail the piece.
+#Author: Harley Goodner
+#Date: September 22, 2023
+#Discription: This code was created to determine the postage cost for entered mail. By determining the postage class (found by the length, width, and thickness of the piece) and the number of postage zones the piece must travel to, the algorithm can return the cost to mail the piece.
 #Bugs: None found
 
 
