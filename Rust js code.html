@@ -1,0 +1,149 @@
+<!--
+Author: Harley Goodner
+Date: October 27, 2023
+Discription: This code was created to determine the postage cost for entered mail. By determining the postage class (found by the length, width, and thickness of the piece) and the number of postage zones the piece must travel to, the algorithm can return the cost to mail the piece.
+Bugs: None found
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GCDS Rust Removal</title>
+</head>
+<body style = "background-color:rgb(190, 204, 228);">
+    <center>
+    <h3>Enter Dimensions of Piece of Mail:</h3>
+   
+<form id="myForm" onsubmit="calculate_cost()">
+  <label for="length">Length:</label><br>
+  <input type="text" id="length" name="length" required><br>
+
+  <label for="height">Height:</label><br>
+  <input type="text" id="height" name="height" required><br>
+
+  <label for="thick">Thickness:</label><br>
+  <input type="text" id="thick" name="thick" required><br>
+
+  <label for="zip1">Starting Zip Code:</label><br>
+  <input type="text" id="zip1" name="zip1" required><br>
+
+  <label for="zip2">Final Zip Code:</label><br>
+  <input type="text" id="zip2" name="zip2" required><br>
+
+</form> 
+
+<button onclick="calculate_cost()">Calculate Price</button>  
+
+<p id="cost"></p>
+
+<script>
+
+    function get_size(length,height,thick){    
+    /*
+    //defines the function size which takes three float inputs (length, width, height) and outputs the classtype of the package
+    //length is defined by the user's measurement of the length of the piece of mail
+    //height is defined by the user's measurement of the height of the piece of mail
+    //thick is difined by the user's measurement of the height of the piece of mail
+    //returns the classtype of the piece of mail
+    */
+    ///determines the classtype of the package depending on its length, height, and thickness
+
+    if ((3.5<=length && length<=4.25) && (3.5<=height && height<=6) && (.007<=thick && thick<=.016))   {       
+        return "Post Card" ;                                                        
+    } else if ((4.25<length && length<6) && (6<height && height<11.5) && (.007<=thick && thick<=.015)) {                
+        return "Large Post Card" ;                                                       
+    } else if ((3.5<=length && length<=6.125) && (5<=height && height<=11.5) && (.016<thick && thick<.25)) {            
+        return "Envelope" ;                                                             
+    } else if ((6.125<length && length<24) && (11<=height && height<=18) && (.25<=thick && thick<=.5)) {                 
+        return "Large Envelope" ;                                                      
+    } else if ((length>0) && (height>0) && (thick>0) && ((2*length)+(2*height)+(2*thick))<=84)   {                                      
+        return "Package" ;                                                               
+    } else if (84<((2*length)+(2*height)+(2*thick)) && ((2*length)+(2*height)+(2*thick))<130) {                                     
+        return "Large Package" ;                                                        
+    } else  {                                                                         
+       var package = "Unmailable"
+    }
+    }
+
+    function get_zone(z){ 
+    /*
+    //defines the function zone which takes one input (an integer zip code) and outputs the postal zone of the zip code
+    //z is an integer defined by either the starting or ending zip code the user is sending their piece of mail to or from
+    //returns the postal zone the piece of mail is being sent to or from
+    */
+    //determines the postal zone of the zip code that was input
+    if (1<=z && z<=6999)  {            
+        return "1" ;                                                                   
+    } else if (7000<=z && z<=19999)  {                                                          
+        return "2" ;                                                                     
+    } else if (20000<=z && z<=35999) {                                                           
+        return "3" ;                                                                     
+    } else if (36000<=z && z<=62999) {                                                           
+        return "4" ;                                                                     
+    } else if (63000<=z && z<=84999) {                                                           
+        return "5" ;                                                                     
+    } else if (85000<=z && z<=99999) {                                                           
+        return "6" ;
+    }
+    }
+
+    function get_cost(classtype,netzone){ 
+    /*
+    //defines the function getcost that takes two inputs, the classtype of the package and the amount of zones the package will travel through
+    //classtype is defined by the classtype of the piece of mail which was returned by the size function
+    //netzone is defined by the absolute value of the starting and ending postal zones of the package (determined by the zone function)
+    //returns the cost of mailing the piece of mail
+    */
+    //determines the cost
+    if (classtype=="Post Card") {     
+        cost=.20+(.03*netzone) ;                                                         
+    } else if (classtype=="Large Post Card")  {                                                
+        cost=.37+(.03*netzone)                                                         
+    } else if (classtype=="Envelope") {                                                     
+        cost=.37+(.04*netzone) ;                                                        
+    } else if (classtype=="Large Envelope") {                                                
+        cost=.60+(.05*netzone) ;                                                        
+    } else if (classtype=="Package")  {                                                        
+        cost=2.95+(.25*netzone) ;                                                        
+    } else if (classtype=="Large Package") {                                                  
+        cost=3.95+(.35*netzone) ;                                                       
+    } else  if (classtype=="Unmailable") {                                                                         
+       cost = "Unmailable";                                                   
+    }
+    var final_cost = cost.toString()          //sets the cost to a string
+    if (final_cost.substring(final_cost.indexOf(".")+1,).length == 1) { //formats the cost to currency form (adds a zero in the hundredths place if there was no digit there)
+        final_cost = final_cost + "0"
+    } 
+    if(final_cost[0] == "0") {                //removes the leading zero before the decimal point
+    final_cost = final_cost.substring(1,)
+    }
+    return final_cost
+    }
+
+    function calculate_cost() {
+        /*
+        calculate function that executes entire program
+        functions as the main
+        */
+       var length = document.getElementById("length").value;                           // Get the values entered by the user
+       var height = document.getElementById("height").value;
+       var thick = document.getElementById("thick").value;
+       var zip1 = document.getElementById("zip1").value;
+       var zip2 = document.getElementById("zip2").value;
+
+       var classtype = get_size(length,height,thick)                                       //calls the size function
+       console.log(classtype)
+       var zone1 = get_zone(zip1)                                                          //calls the zone function inputting zip1
+       var zone2 = get_zone(zip2)                                                          //calls the zone function inputting zip2
+       var net_zone = Math.abs(zone1-zone2)                                            //takes absolute value of zones
+       var mailing_cost = get_cost(classtype,net_zone)                                  //calls the getcost function  
+       if (isNaN(mailing_cost)) {
+        mailing_cost = 'Unmailable'
+       }              
+       document.getElementById("cost").innerHTML = mailing_cost;    //outputs the cost to mail on the website
+   }
+</script>
+<img src="Post_Office_Open.png">
+</center>
+</body>
+</html>
