@@ -4,6 +4,7 @@
 #Bugs: When adding a student to the file, two blank rows are added to the file under the row with the new student.
 #Specs Answered: I provided functions for requirements 1,2,3,4,5,6,7,9,9a. I also added 9b,10,and 10a to improve the program and I added challenges 12 and 14.
 
+
 import os
 import matplotlib.pyplot as plt
 from csv import writer
@@ -13,7 +14,12 @@ def main():
     main function that executes entire program
     '''
 
-    file_input = open("c:\\Users\hgoodner24\\Desktop\\CS2\\gcds_data2.csv") #opens the data
+    from pathlib import Path
+
+    current_dir = Path(__file__).parent
+    file_path = current_dir / "gcds_data2.csv"
+
+    file_input = open(file_path)
 
     file_input.readline()                                                   #skip first line of header info
     run = True
@@ -44,6 +50,7 @@ def main():
             see_grades(file_input)
         elif answer == "10":
             delete_student(file_input)
+            file_input = open(file_path)
         elif answer == "Q":
             run = False
             print("bye")
@@ -233,15 +240,21 @@ def delete_student(file_in):
     kid = input("What is the first and last name of the student you want to delete? ").split(" ")
     fname = kid[0]
     lname = kid[1]
-    new_file = open('c:\\Users\hgoodner24\\Desktop\\CS2\\new.csv', 'w')     #opens a new file in writer mode
+
+    from pathlib import Path
+
+    current_dir = Path(__file__).parent
+    new_file = current_dir / "new.csv"
+
+    file_new = open(new_file, 'w')                                          #opens a new file in writer mode
     for row in file_in:                                                     #runs through each row in the original file
         student = row.split(",")
         if (student[0] == fname) and (student[2] == lname):                 #does nothing to the row in the orginal file that the user wants to delete
             continue
         else:
-            new_file.write(row)                                             #writes all the other rows to the new file
+            file_new.write(row)                                             #writes all the other rows to the new file
     file_in.close()                                                         #closes the original file
-    new_file.close()                                                        #closes the new file
+    file_new.close()                                                        #closes the new file
     os.remove('gcds_data2.csv')                                             #deletes the entire original file
     os.rename('new.csv','gcds_data2.csv')                                   #renames the new file to match the name of the old, deleted file
 
