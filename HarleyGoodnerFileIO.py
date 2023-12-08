@@ -2,6 +2,7 @@
 #Date: November 28, 2023
 #Discription: This code was created to build an archetecture to allow for the analysis of data. The program allows a user to sift through data and answer potential questions/manipulate the data itself by adding or deleting rows in the file.
 #Bugs: When adding a student to the file, two blank rows are added to the file under the row with the new student.
+#Specs Answered: I provided functions for requirements 1,2,3,4,5,6,7,9,9a. I also added 9b,10,and 10a to improve the program and I added challenges 12 and 14.
 
 import os
 import matplotlib.pyplot as plt
