@@ -8,13 +8,13 @@
 import os
 import matplotlib.pyplot as plt
 from csv import writer
+from pathlib import Path
+
 
 def main():
     '''
     main function that executes entire program
     '''
-
-    from pathlib import Path
 
     current_dir = Path(__file__).parent
     file_path = current_dir / "gcds_data2.csv"
@@ -66,8 +66,9 @@ def check_freshmen(file_in):
     file_in.seek(0)                                     #move pointer to line 1
 
     for row in file_in:
-
         student = row.split(",")
+        if student[0][-1] == '\n':                      #added this if statement to each function to solve for the bug where two blanks lines are added to the file when adding a new student
+            continue                                    #continues past blank lines so doesn't include them when running function
         if student[3] == "9":
             print(student[0] + " " + student[2])
 
@@ -82,6 +83,8 @@ def find_gender(file_in):
     girls = 0
     for row in file_in:
         student = row.split(",")
+        if student[0][-1] == '\n':
+            continue
         if student[4] == "M":
             boys +=1
         elif student[4] == "F":
@@ -105,6 +108,8 @@ def count_seniors(file_in):
     seniors = 0
     for row in file_in:
         student = row.split(",")
+        if student[0][-1] == '\n':
+            continue
         if student[3] == "12":
             seniors +=1
     print("Senior Class Size: " + str(seniors))
@@ -118,6 +123,8 @@ def check_rye_high(file_in):
     file_in.seek(0)                                     
     for row in file_in:
         student = row.split(",")
+        if student[0][-1] == '\n':
+            continue
         if (student[3] == "9") or (student[3] == "10") or (student[3] == "11") or (student[3] == "12"):
             if student[7] == "Rye":
                 print(student[0] + " " + student[2])
@@ -132,7 +139,7 @@ def count_students(file_in):
     while True:
         grade = input("What class do you want to see the size of? Enter number or PK = Pre-K and K= Kindergarten ")
         if grade.isnumeric():
-            if int(grade) not in range(1,12):                           #if the grade the user asks for the size of is not a grade K-12, tells the user their entry was invalid
+            if int(grade) not in range(1,13):                           #if the grade the user asks for the size of is not a grade K-12, tells the user their entry was invalid
                 print("invailid entry")
                 break
         
@@ -143,6 +150,8 @@ def count_students(file_in):
         size = 0                                                        #creates variable size that will represent the size of the grade and sets it to zero
         for row in file_in:
             student = row.split(",")
+            if student[0][-1] == '\n':
+                continue
             if str(grade) == student[3]:
                 size +=1                                                #adds one to the size variable if the grade of the student matches the grade the user asked the size of
         print("Class Size: " + str(size))                               #displays the class size
@@ -162,6 +171,8 @@ def find_student(file_in):
     lastname = kid[1]
     for row in file_in:
         student = row.split(",")
+        if student[0][-1] == '\n':
+            continue
         if (lastname == student[2]) and (firstname == student[0]):
             found = True                                               #since the row was found, the variable is equal to true
             print(row)
@@ -198,6 +209,8 @@ def sort_names(file_in):
     file_in.seek(0)
     for row in file_in:
         student = row.split(",")
+        if student[0][-1] == '\n':
+            continue
         print(student[0] + "," + student[2])
 
 def see_grades(file_in):
@@ -213,6 +226,8 @@ def see_grades(file_in):
     seniors = 0
     for row in file_in:
         student = row.split(",")
+        if student[0][-1] == '\n':
+            continue
         if student[3] == "9":
             freshman +=1
         elif student[3] == "10":
@@ -241,14 +256,14 @@ def delete_student(file_in):
     fname = kid[0]
     lname = kid[1]
 
-    from pathlib import Path
-
-    current_dir = Path(__file__).parent
+    current_dir = Path(__file__).parent                                     
     new_file = current_dir / "new.csv"
 
     file_new = open(new_file, 'w')                                          #opens a new file in writer mode
     for row in file_in:                                                     #runs through each row in the original file
         student = row.split(",")
+        if student[0][-1] == '\n':
+            continue
         if (student[0] == fname) and (student[2] == lname):                 #does nothing to the row in the orginal file that the user wants to delete
             continue
         else:
