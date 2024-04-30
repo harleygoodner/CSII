@@ -13,19 +13,20 @@ def main():
     user_map = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
     user_map = user_setup(user_map)
     computer_map = computer_setup(computer_map)
+    display_map(computer_map)
 
     user_hits = 0
     comp_hits = 0
     for turn in range(10):
-        userwon, compwon = False, False
-        userwon, hit_map, user_hits= user_move(turn, computer_map, hit_map, user_hits)
-        if userwon:
+        user_won, comp_won = False, False
+        user_won, hit_map, user_hits= user_move(turn, computer_map, hit_map, user_hits)
+        if user_won:
             break
-        compwon, user_map, comp_hits = computer_move(user_map, comp_hits)
-        if compwon:
+        comp_won, user_map, comp_hits = computer_move(user_map, comp_hits)
+        if comp_won:
             break
         
-    if not userwon and not compwon:
+    if not user_won and not comp_won:
         print("Ten Rounds complete. The game ends in a tie.")
 
 
@@ -89,7 +90,7 @@ def user_move(turn, computer_map, hit_map, user_hits):
     '''
     allows the user to guess where the computer's ships are located
     takes turn, which is a counter of the amount of rounds remaining, takes the computer map, takes the hit map (map of where the user has guessed and the result of those guesses), takes user_hits, which is a counter of the amount of ships the user has sank
-    returns userwon (boolean for if the user has won and game should end), the hit map, and the user_hits counter
+    returns user_won (boolean for if the user has won and game should end), the hit map, and the user_hits counter
     '''
     while True:
         print(f"This is the computer's map: {display_map(hit_map)}")
@@ -115,19 +116,19 @@ def user_move(turn, computer_map, hit_map, user_hits):
             hit_map[user_row][user_column] = "🌊"
             print(f"{9-turn} rounds left")
             break           
-    userwon = False
+    user_won = False
     if user_hits == 4:
         print("You sunk all of the computer's ships! You win! Game over.")
-        userwon = True
+        user_won = True
 
-    return userwon, hit_map, user_hits
+    return user_won, hit_map, user_hits
         
 
 def computer_move(user_map,comp_hits):
     '''
     allows the computer to randomly guess where the user's ships are located
     takes the user map and comp_hits, a counter of the amount of ships the computer has sunk
-    returns compwon (boolean for if the user has won and game should end), the user map, and the comp_hits counter
+    returns comp_won (boolean for if the user has won and game should end), the user map, and the comp_hits counter
     '''
     row = random.randrange(0,4)
     column = random.randrange(0,4)
@@ -136,12 +137,12 @@ def computer_move(user_map,comp_hits):
         comp_hits +=1
     elif user_map[row][column] == 0:
         print("Computer's turn...Computer missed your battleship :)")
-    compwon = False
+    comp_won = False
     if comp_hits == 4:
         print("Computer has sunk all your ships. You lose. Game over.")
-        compwon = True
+        comp_won = True
 
-    return compwon, user_map, comp_hits
+    return comp_won, user_map, comp_hits
 
 
 
